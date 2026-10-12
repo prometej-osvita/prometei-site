@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прометей: Нова освіта | Степінь числа</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 40px; padding: 20px 0; border-bottom: 2px solid var(--border); }
+        header h1 { color: var(--primary); font-size: 2rem; margin-bottom: 10px; }
+        header p { color: var(--text-light); font-size: 1.1rem; }
+
+        .block { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid var(--border); }
+        .block-title { font-size: 1.5rem; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        
+        .formula-box { background: var(--bg); padding: 20px; border-radius: 8px; text-align: center; font-size: 1.5rem; font-weight: bold; margin: 15px 0; border-left: 5px solid var(--primary); }
+        .sub { font-size: 0.9rem; color: var(--text-light); font-weight: normal; display: block; margin-top: 5px; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        
+        .badge { padding: 15px; border-radius: 8px; font-size: 0.95rem; }
+        .badge-pos { background: var(--success-bg); border: 1px solid var(--success); color: var(--success); }
+        .badge-neg { background: var(--error-bg); border: 1px solid var(--error); color: var(--error); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--bg); border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: #edf2f7; color: var(--text); font-weight: 600; }
+        code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 1rem; }
+
+        .quiz-card { background: var(--bg); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .quiz-card p { font-weight: 600; margin-bottom: 15px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .btn-opt { background: var(--card-bg); border: 1px solid var(--border); padding: 12px 15px; text-align: left; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+        .btn-opt:hover:not([disabled]) { background: #f1f5f9; border-color: var(--text-light); }
+        
+        .btn-opt.correct { background: var(--success-bg) !important; border-color: var(--success) !important; color: var(--success) !important; font-weight: bold; }
+        .btn-opt.wrong { background: var(--error-bg) !important; border-color: var(--error) !important; color: var(--error) !important; }
+        
+        .feedback { margin-top: 12px; padding: 10px 15px; border-radius: 6px; font-size: 0.95rem; display: none; line-height: 1.4; }
+        .feedback.correct-feed { background: var(--success-bg); color: var(--success); border-left: 4px solid var(--success); display: block; }
+        .feedback.wrong-feed { background: var(--error-bg); color: var(--error); border-left: 4px solid var(--error); display: block; }
+
+        .progress-bar { background: var(--border); height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { background: var(--success); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .score-text { font-weight: bold; color: var(--success); margin-bottom: 5px; text-align: right; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Прометей: Нова освіта</h1>
+        <p>Інтерактивний модуль: Степінь з натуральним показником</p>
+    </header>
+
+    <!-- БЛОК 1: ТЕОРІЯ -->
+    <div class="block">
+        <div class="block-title">📚 Блок 1. Що таке степінь?</div>
+        <p><strong>Степенем</strong> числа <code>a</code> з натуральним показником <code>n</code> (де n > 1) називають добуток <code>n</code> множників, кожен з яких дорівнює <code>a</code>.</p>
+        
+        <div class="formula-box">
+            a<sup>n</sup> = a · a · ... · a
+            <span class="sub">(всього n множників)</span>
+        </div>
+
+        <p>• <strong>a (основа)</strong> — число, яке помножують саме на себе.<br>
+           • <strong>n (показник)</strong> — скільки разів це число повторюється.</p>
+
+        <div class="grid">
+            <div class="badge badge-pos">
+                <strong>Парний показник (2, 4, 6...):</strong><br>Результат завжди <b>додатний</b>.<br><i>Приклад: (-3)² = 9</i>
+            </div>
+            <div class="badge badge-neg">
+                <strong>Непарний показник (3, 5, 7...):</strong><br>Результат зберігає мінус <b>від'ємний</b>.<br><i>Приклад: (-2)³ = -8</i>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: ВЛАСТИВОСТІ -->
+    <div class="block">
+        <div class="block-title">📑 Блок 2. Властивості степенів</div>
+        <p>Головні правила, які допоможуть швидко спрощувати математичні вирази:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Операція</th>
+                    <th>Формула</th>
+                    <th>Що робити з показниками?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Множення</strong></td>
+                    <td><code>a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></code></td>
+                    <td>Додавати (+)</td>
+                </tr>
+                <tr>
+                    <td><strong>Ділення</strong></td>
+                    <td><code>a<sup>m</sup> : a<sup>n</sup> = a<sup>m-n</sup></code></td>
+                    <td>Віднімати (-)</td>
+                </tr>
+                <tr>
+                    <td><strong>Піднесення до степеня</strong></td>
+                    <td><code>(a<sup>m</sup>)<sup>n</sup> = a<sup>m·n</sup></code></td>
+                    <td>Перемножувати (·)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- БЛОК 3: ТРЕНАЖЕР -->
+    <div class="block">
+        <div class="block-title">🎯 Блок 3. Експрес-тренажер знань</div>
+        <div class="score-text">Успішно виконано: <span id="score">0</span> з 3</div>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+        <!-- Питання 1 -->
+        <div class="quiz-card" id="q1">
+            <p>1. Обчисліть значення виразу: 2⁴</p>
+            <div class="options">
+                <button class="btn-opt" onclick="checkAnswer(this, false, 'q1', 'Помилка! Ви автоматично помножили 2 на 4. А потрібно помножити двійку саму на себе 4 рази.')">8</button>
+                <button class="btn-opt" onclick="checkAnswer(this, true, 'q1', 'Правильно! 2 · 2 · 2 · 2 = 16.')">16</button>
+                <button class="btn-opt" onclick="checkAnswer(this, false, 'q1', 'Неправильно. Степінь — це множення, а не додавання чисел.')">6</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <!-- Питання 2 -->
+        <div class="quiz-card" id="q2">
+            <p>2. Спростіть вираз: 5³ · 5⁴</p>
+            <div class="options">
+                <button class="btn-opt" onclick="checkAnswer(this, false, 'q2', 'Помилка. При множенні однакових основ показники додаються (m+n), а не перемножуються.')">5¹²</button>
+                <button class="btn-opt" onclick="checkAnswer(this, true, 'q2', 'Відмінно! За властивістю додаємо показники: 3 + 4 = 7.')">5⁷</button>
+                <button class="btn-opt" onclick="checkAnswer(this, false, 'q2', 'Неправильно. Основу степеня (5) змінювати чи перемножувати не потрібно.')">25⁷</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <!-- Питання 3 -->
+        <div class="quiz-card" id="q3">
+            <p>3. Подайте у вигляді степеня: (x³)⁴</p>
+            <div class="options">
+                <button class="btn-opt" onclick="checkAnswer(this, false, 'q3', 'Ви додали показники, але при піднесенні степеня до степеня їх треба помножити.')">x⁷</button>
+                <button class="btn-opt" onclick="checkAnswer(this, true, 'q3', 'Абсолютно правильно! Показники перемножуються: 3 · 4 = 12.')">x¹²</button>
+                <button class="btn-opt" onclick="checkAnswer(this, false, 'q3', 'Ні, не потрібно підносити трійку до 4-го степеня. Лише перемножити числа.')">x⁸¹</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let solvedQuestions = new Set();
+    const totalQuestions = 3;
+
+    function checkAnswer(button, isCorrect, qId, feedbackText) {
+        const card = document.getElementById(qId);
+        const buttons = card.querySelectorAll('.btn-opt');
+        const feedbackDiv = card.querySelector('.feedback');
+
+        buttons.forEach(btn => btn.classList.remove('wrong'));
+
+        if (isCorrect) {
+            button.classList.add('correct');
+            feedbackDiv.className = "feedback correct-feed";
+            feedbackDiv.innerText = feedbackText;
+            
